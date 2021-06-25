@@ -84,6 +84,7 @@ DEFAULT_WELCOME_MESSAGES = [
     "Hey {first}, we have the droids you are looking for.",
     "Hi {first}\nThis isn't a strange place, this is my home, it's the people who are strange.",
     "Oh, hey {first} what's the password?",
+    "Jack in,\n{first}.EXE!,\nExecute!",  # Megaman Battle Network reference
     "Hey {first}, I know what we're gonna do today",
     "{first} just joined, be at alert they could be a spy.",
     "{first} joined the group, read by Mark Zuckerberg, CIA and 35 others.",
