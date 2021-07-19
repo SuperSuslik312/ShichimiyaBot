@@ -151,7 +151,6 @@ def send(update, message, keyboard, backup_message):
     return msg
 
 
-@run_async
 @loggable
 def new_member(update: Update, context: CallbackContext):
     bot, job_queue = context.bot, context.job_queue
@@ -312,7 +311,6 @@ def new_member(update: Update, context: CallbackContext):
                         parse_mode=ParseMode.HTML,
                     )
                 update.effective_message.reply_text(
-                                                                                  
                     "Watashi ga kita!", reply_to_message_id=reply
                 )
                 continue
@@ -497,7 +495,7 @@ def new_member(update: Update, context: CallbackContext):
                     if not media_wel:
                         VERIFIED_USER_WAITLIST.update(
                             {
-                                (chat.id, new_mem.id): {
+                                new_mem.id: {
                                     "should_welc": should_welc,
                                     "media_wel": False,
                                     "status": False,
@@ -512,7 +510,7 @@ def new_member(update: Update, context: CallbackContext):
                     else:
                         VERIFIED_USER_WAITLIST.update(
                             {
-                                (chat.id, new_mem.id): {
+                                new_mem.id: {
                                     "should_welc": should_welc,
                                     "chat_id": chat.id,
                                     "status": False,
@@ -539,7 +537,7 @@ def new_member(update: Update, context: CallbackContext):
                     if to_append:
                         btn.append(to_append)
 
-                    message = msg.reply_photo(fileobj, caption=f'Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted!',
+                    message = msg.reply_photo(fileobj, caption=f'Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted! You have 120 seconds before you get kicked',
                                     reply_markup=InlineKeyboardMarkup(btn),
                                     parse_mode=ParseMode.MARKDOWN,
                                     reply_to_message_id=reply,
@@ -557,6 +555,11 @@ def new_member(update: Update, context: CallbackContext):
                             can_send_other_messages=False,
                             can_add_web_page_previews=False,
                         ),
+                    )
+                    job_queue.run_once(
+                        partial(check_not_bot, new_mem, chat.id, message.message_id),
+                        120,
+                        name="welcomemute",
                     )
 
         if welcome_bool:
@@ -622,7 +625,6 @@ def check_not_bot(member, chat_id, message_id, context):
             pass
 
 
-@run_async
 def left_member(update: Update, context: CallbackContext):
     bot = context.bot
     chat = update.effective_chat
@@ -731,7 +733,6 @@ def left_member(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 @user_admin
 def welcome(update: Update, context: CallbackContext):
     args = context.args
@@ -794,7 +795,6 @@ def welcome(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 @user_admin
 def goodbye(update: Update, context: CallbackContext):
     args = context.args
@@ -846,7 +846,6 @@ def goodbye(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 @user_admin
 @loggable
 def set_welcome(update: Update, context: CallbackContext) -> str:
@@ -871,7 +870,6 @@ def set_welcome(update: Update, context: CallbackContext) -> str:
     )
 
 
-@run_async
 @user_admin
 @loggable
 def reset_welcome(update: Update, context: CallbackContext) -> str:
@@ -891,7 +889,6 @@ def reset_welcome(update: Update, context: CallbackContext) -> str:
     )
 
 
-@run_async
 @user_admin
 @loggable
 def set_goodbye(update: Update, context: CallbackContext) -> str:
@@ -914,7 +911,6 @@ def set_goodbye(update: Update, context: CallbackContext) -> str:
     )
 
 
-@run_async
 @user_admin
 @loggable
 def reset_goodbye(update: Update, context: CallbackContext) -> str:
@@ -934,7 +930,6 @@ def reset_goodbye(update: Update, context: CallbackContext) -> str:
     )
 
 
-@run_async
 @user_admin
 @loggable
 def welcomemute(update: Update, context: CallbackContext) -> str:
@@ -978,7 +973,7 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
         elif args[0].lower() in ["captcha"]:
             sql.set_welcome_mutes(chat.id, "captcha")
             msg.reply_text(
-                "I will now mute people when they join until they prove they're not a bot.\nThey have to solve a captcha to get unmuted."
+                "I will now mute people when they join until they prove they're not a bot.\nThey have to solve a captcha within 120 seconds to get unmuted."
             )
             return (
                 f"<b>{html.escape(chat.title)}:</b>\n"
@@ -1002,7 +997,6 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @user_admin
 @loggable
 def clean_welcome(update: Update, context: CallbackContext) -> str:
@@ -1045,7 +1039,6 @@ def clean_welcome(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @user_admin
 def cleanservice(update: Update, context: CallbackContext) -> str:
     args = context.args
@@ -1079,7 +1072,6 @@ def cleanservice(update: Update, context: CallbackContext) -> str:
             )
 
 
-@run_async
 def user_button(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -1143,7 +1135,6 @@ def user_button(update: Update, context: CallbackContext):
     else:
         query.answer(text="You're not allowed to do this!")
 
-@run_async
 def user_captcha_button(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -1162,7 +1153,7 @@ def user_captcha_button(update: Update, context: CallbackContext):
         c_captcha_ans = CAPTCHA_ANS_DICT.pop((join_chat, join_user))
         if c_captcha_ans == captcha_ans:
             sql.set_human_checks(user.id, chat.id)
-            member_dict = VERIFIED_USER_WAITLIST[(chat.id, user.id)]
+            member_dict = VERIFIED_USER_WAITLIST.pop(user.id)
             member_dict["status"] = True
             query.answer(text="Yeet! You're a human, unmuted!")
             bot.restrict_chat_member(
@@ -1260,11 +1251,9 @@ WELC_MUTE_HELP_TXT = (
     "• `/welcomemute strong`*:* mutes new members till they tap on a button thereby verifying they're human.\n"
     "• `/welcomemute captcha`*:*  mutes new members till they solve a button captcha thereby verifying they're human.\n"
     "• `/welcomemute off`*:* turns off welcomemute.\n"
-    "*Note:* Strong mode kicks a user from the chat if they dont verify in 120seconds. They can always rejoin though"
+    "*Note:* Strong/Captcha mode kicks a user from the chat if they dont verify in 120seconds. They can always rejoin though"
 )
 
-
-@run_async
 @user_admin
 def welcome_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
@@ -1308,7 +1297,6 @@ def getDefense(update: Update, context: CallbackContext):
     msg.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @user_admin
 def welcome_mute_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
@@ -1362,52 +1350,26 @@ user joined chat, user left chat.
  • `/welcomehelp`*:* view more formatting information for custom welcome/goodbye messages.
 """
 
-                                 
-NEW_MEM_HANDLER = MessageHandler(Filters.status_update.new_chat_members, new_member)
- 
-                                  
-LEFT_MEM_HANDLER = MessageHandler(Filters.status_update.left_chat_member, left_member)
- 
-                                   
-WELC_PREF_HANDLER = CommandHandler("welcome", welcome, filters=Filters.group)
- 
-GOODBYE_PREF_HANDLER = CommandHandler("goodbye", goodbye, filters=Filters.group)
-                                                                        
- 
-                             
-SET_WELCOME = CommandHandler("setwelcome", set_welcome, filters=Filters.group)
- 
-                             
-SET_GOODBYE = CommandHandler("setgoodbye", set_goodbye, filters=Filters.group)
- 
-                               
-RESET_WELCOME = CommandHandler("resetwelcome", reset_welcome, filters=Filters.group)
- 
-                               
-RESET_GOODBYE = CommandHandler("resetgoodbye", reset_goodbye, filters=Filters.group)
- 
-                                     
-WELCOMEMUTE_HANDLER = CommandHandler("welcomemute", welcomemute, filters=Filters.group)
- 
+NEW_MEM_HANDLER = MessageHandler(Filters.status_update.new_chat_members, new_member, run_async=True)
+LEFT_MEM_HANDLER = MessageHandler(Filters.status_update.left_chat_member, left_member, run_async=True)
+WELC_PREF_HANDLER = CommandHandler("welcome", welcome, filters=Filters.chat_type.groups, run_async=True)
+GOODBYE_PREF_HANDLER = CommandHandler("goodbye", goodbye, filters=Filters.chat_type.groups, run_async=True)
+SET_WELCOME = CommandHandler("setwelcome", set_welcome, filters=Filters.chat_type.groups, run_async=True)
+SET_GOODBYE = CommandHandler("setgoodbye", set_goodbye, filters=Filters.chat_type.groups, run_async=True)
+RESET_WELCOME = CommandHandler("resetwelcome", reset_welcome, filters=Filters.chat_type.groups, run_async=True)
+RESET_GOODBYE = CommandHandler("resetgoodbye", reset_goodbye, filters=Filters.chat_type.groups, run_async=True)
+WELCOMEMUTE_HANDLER = CommandHandler("welcomemute", welcomemute, filters=Filters.chat_type.groups, run_async=True)
 CLEAN_SERVICE_HANDLER = CommandHandler(
-    "cleanservice", cleanservice, filters=Filters.group
- 
-                               
-                                                                                   
- 
-                                                                          
-                                                                                        
-                                             
-                                                      
+    "cleanservice", cleanservice, filters=Filters.chat_type.groups, run_async=True
 )
-CLEAN_WELCOME = CommandHandler("cleanwelcome", clean_welcome, filters=Filters.group)
-WELCOME_HELP = CommandHandler("welcomehelp", welcome_help)
-WELCOME_MUTE_HELP = CommandHandler("welcomemutehelp", welcome_mute_help)
-BUTTON_VERIFY_HANDLER = CallbackQueryHandler(user_button, pattern=r"user_join_")
-DEFENSE_HANDLER = CommandHandler("setdefense", setDefense, filters=Filters.group)
-GETDEF_HANDLER = CommandHandler("defense", getDefense, filters=Filters.group)
+CLEAN_WELCOME = CommandHandler("cleanwelcome", clean_welcome, filters=Filters.chat_type.groups, run_async=True)
+WELCOME_HELP = CommandHandler("welcomehelp", welcome_help, run_async=True)
+WELCOME_MUTE_HELP = CommandHandler("welcomemutehelp", welcome_mute_help, run_async=True)
+BUTTON_VERIFY_HANDLER = CallbackQueryHandler(user_button, pattern=r"user_join_", run_async=True)
+DEFENSE_HANDLER = CommandHandler("setdefense", setDefense, filters=Filters.chat_type.groups)
+GETDEF_HANDLER = CommandHandler("defense", getDefense, filters=Filters.chat_type.groups)
 CAPTCHA_BUTTON_VERIFY_HANDLER = CallbackQueryHandler(
-    user_captcha_button, pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)"
+    user_captcha_button, pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)", run_async=True
 )
 
 dispatcher.add_handler(NEW_MEM_HANDLER)

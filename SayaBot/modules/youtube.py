@@ -1,37 +1,33 @@
 import os, glob, json
 
+from datetime import datetime
 from SayaBot.modules.sql.clear_cmd_sql import get_clearcmd
 from telegram import Bot, Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackQueryHandler, CallbackContext, run_async
 from SayaBot import dispatcher
 from SayaBot.modules.disable import DisableAbleCommandHandler
 from SayaBot.modules.helper_funcs.misc import delete
-from youtubesearchpython import SearchVideos
+from youtubesearchpython import VideosSearch
 
 from youtube_dl import YoutubeDL
 
 
-@run_async
 def youtube(update: Update, context: CallbackContext):
     bot = context.bot
     message = update.effective_message
     chat = update.effective_chat
     yt = message.text[len("/youtube ") :]
     if yt:
-        search = SearchVideos(yt, offset=1, mode="json", max_results=1)
-        test = search.result()
-        
+        search = VideosSearch(yt, limit=1)
+        result = search.result()
+
         try:
-            p = json.loads(test)
+            url = result["result"][0]["link"]
+            title = result["result"][0]["title"]
         except:
             return message.reply_text(
-                "Failed to find song or video", 
-                parse_mode = ParseMode.MARKDOWN
+                "Failed to find song or video",
             )
-        
-        q = p.get("search_result")
-        url = q[0]["link"]
-        title = q[0]["title"]
 
         buttons = [
             [
@@ -59,7 +55,6 @@ def youtube(update: Update, context: CallbackContext):
         context.dispatcher.run_async(delete, delmsg, cleartime.time)
 
 
-@run_async
 def youtube_callback(update: Update, context: CallbackContext):
     bot = context.bot
     message = update.effective_message
@@ -92,20 +87,25 @@ def youtube_callback(update: Update, context: CallbackContext):
         codec = "mp3"
         
         with YoutubeDL(opts) as rip:
-            rip_data = rip.extract_info(media_url)
-
-            try:
-                delmsg = bot.send_audio(
-                    chat_id = chat.id,
-                    audio = open(f"{rip_data['title']}.{codec}", "rb"),
-                    duration = int(rip_data['duration']),
-                    title = str(rip_data['title']),
-                    parse_mode = ParseMode.HTML
-                )
-                context.dispatcher.run_async(delete, deltext, 0)
-            except:
+            rip_data = rip.extract_info(media_url, download=False, process=False)
+            if int(rip_data['duration'] / 60) < 10:
+                try:
+                    rip_data = rip.extract_info(media_url)
+                    delmsg = bot.send_audio(
+                        chat_id = chat.id,
+                        audio = open(f"{rip_data['title']}.{codec}", "rb"),
+                        duration = int(rip_data['duration']),
+                        title = str(rip_data['title']),
+                        parse_mode = ParseMode.HTML
+                    )
+                    context.dispatcher.run_async(delete, deltext, 0)
+                except:
+                    delmsg = message.edit_text(
+                        "Song is too large for processing, or any other error happened. Try again later or you could also use the /song command"
+                    )
+            else:
                 delmsg = message.edit_text(
-                    "Song is too large for processing, or any other error happened. Try again later or you can try /song 'song name'"
+                    "Song is too large for processing. Duration is limited to 10 minutes max"
                 )
 
     elif media_type == "video":
@@ -129,21 +129,26 @@ def youtube_callback(update: Update, context: CallbackContext):
         codec = "mp4"
 
         with YoutubeDL(opts) as rip:
-            rip_data = rip.extract_info(media_url)
-
-            try:
-                delmsg = bot.send_video(
-                    chat_id = chat.id,
-                    video = open(f"{rip_data['title']}.{codec}", "rb"),
-                    duration = int(rip_data['duration']),
-                    caption = rip_data['title'],
-                    supports_streaming = True,
-                    parse_mode = ParseMode.HTML
-                )
-                context.dispatcher.run_async(delete, deltext, 0)
-            except:
+            rip_data = rip.extract_info(media_url, download=False, process=False)
+            if int(rip_data['duration'] / 60) < 10:
+                try:
+                    rip_data = rip.extract_info(media_url)
+                    delmsg = bot.send_video(
+                        chat_id = chat.id,
+                        video = open(f"{rip_data['title']}.{codec}", "rb"),
+                        duration = int(rip_data['duration']),
+                        caption = rip_data['title'],
+                        supports_streaming = True,
+                        parse_mode = ParseMode.HTML
+                    )
+                    context.dispatcher.run_async(delete, deltext, 0)
+                except:
+                    delmsg = message.edit_text(
+                        "Video is too large for processing, or any other error happened. Try again later or you can use the /video command"
+                    )
+            else:
                 delmsg = message.edit_text(
-                    "Video is too large for processing, or any other error happened. Try again later or you can also try /video 'video name'"
+                    "Video is too large for processing. Duration is limited to 10 minutes max"
                 )
     else:
         delmsg = message.edit_text("Canceling...")
@@ -160,9 +165,9 @@ def youtube_callback(update: Update, context: CallbackContext):
         context.dispatcher.run_async(delete, delmsg, cleartime.time)
 
 
-YOUTUBE_HANDLER = DisableAbleCommandHandler(["youtube", "yt"], youtube)
+YOUTUBE_HANDLER = DisableAbleCommandHandler(["youtube", "yt"], youtube, run_async = True)
 YOUTUBE_CALLBACKHANDLER = CallbackQueryHandler(
-    youtube_callback, pattern="youtube*"
+    youtube_callback, pattern="youtube*", run_async=True
 )
 dispatcher.add_handler(YOUTUBE_HANDLER)
 dispatcher.add_handler(YOUTUBE_CALLBACKHANDLER)

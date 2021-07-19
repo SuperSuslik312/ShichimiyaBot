@@ -53,7 +53,6 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
 ### Deep link example ends
 
 
-@run_async
 @dev_plus
 @gloggable
 def addsudo(update: Update, context: CallbackContext) -> str:
@@ -112,7 +111,6 @@ def addsudo(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-@run_async
 @sudo_plus
 @gloggable
 def addsupport(
@@ -171,7 +169,6 @@ def addsupport(
     return log_message
 
 
-@run_async
 @sudo_plus
 @gloggable
 def addwhitelist(update: Update, context: CallbackContext) -> str:
@@ -227,7 +224,6 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-@run_async
 @sudo_plus
 @gloggable
 def addtiger(update: Update, context: CallbackContext) -> str:
@@ -289,7 +285,6 @@ def addtiger(update: Update, context: CallbackContext) -> str:
 
 
 
-@run_async
 @sudo_plus
 @gloggable
 def adduranus(update: Update, context: CallbackContext) -> str:
@@ -355,7 +350,6 @@ def adduranus(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-@run_async
 @dev_plus
 @gloggable
 def removesudo(update: Update, context: CallbackContext) -> str:
@@ -398,7 +392,6 @@ def removesudo(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @sudo_plus
 @gloggable
 def removesupport(update: Update, context: CallbackContext) -> str:
@@ -441,7 +434,6 @@ def removesupport(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @sudo_plus
 @gloggable
 def removewhitelist(update: Update, context: CallbackContext) -> str:
@@ -483,7 +475,6 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @sudo_plus
 @gloggable
 def removetiger(update: Update, context: CallbackContext) -> str:
@@ -526,7 +517,6 @@ def removetiger(update: Update, context: CallbackContext) -> str:
 
 
 
-@run_async
 @sudo_plus
 @gloggable
 def removeuranus(update: Update, context: CallbackContext) -> str:
@@ -568,7 +558,6 @@ def removeuranus(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
     reply = "<b>Known Jupiter Solar Union Members 🌙:</b>\n"
@@ -587,7 +576,6 @@ def whitelistlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @whitelist_plus
 def tigerlist(update: Update, context: CallbackContext):
     reply = "<b>Known Mars Solar Union Members 🌘:</b>\n"
@@ -605,7 +593,6 @@ def tigerlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @whitelist_plus
 def uranuslist(update: Update, context: CallbackContext):
     reply = "<b>Known URANUS Solar Union Members ☣️:</b>\n"
@@ -623,7 +610,6 @@ def uranuslist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @whitelist_plus
 def supportlist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -641,7 +627,6 @@ def supportlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @whitelist_plus
 def sudolist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -660,7 +645,6 @@ def sudolist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 @whitelist_plus
 def devlist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -771,23 +755,23 @@ Group admins/group owners do not need these commands.
 Visit @{SUPPORT_CHAT} for more information.
 """
 
-SUDO_HANDLER = CommandHandler(("addsudo", "addvenus"), addsudo)
-SUPPORT_HANDLER = CommandHandler(("addsupport", "addearth"), addsupport)
-TIGER_HANDLER = CommandHandler(("addmars"), addtiger)
-URANUS_HANDLER = CommandHandler(("adduranus"), adduranus)
-WHITELIST_HANDLER = CommandHandler(("addwhitelist", "addwolf"), addwhitelist)
-UNSUDO_HANDLER = CommandHandler(("removesudo", "removevenus"), removesudo)
-UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removeearth"), removesupport)
-UNTIGER_HANDLER = CommandHandler(("removemars"), removetiger)
-UNURANUS_HANDLER = CommandHandler(("removeuranus"), removeuranus)
-UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removewolf"), removewhitelist)
+SUDO_HANDLER = CommandHandler(("addsudo", "addvenus"), addsudo, run_async=True)
+SUPPORT_HANDLER = CommandHandler(("addsupport", "addearth"), addsupport, run_async=True)
+TIGER_HANDLER = CommandHandler(("addmars"), addtiger, run_async=True)
+URANUS_HANDLER = CommandHandler(("adduranus"), adduranus, run_async=True)
+WHITELIST_HANDLER = CommandHandler(("addwhitelist", "addwolf"), addwhitelist, run_async=True)
+UNSUDO_HANDLER = CommandHandler(("removesudo", "removevenus"), removesudo, run_async=True)
+UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removeearth"), removesupport, run_async=True)
+UNTIGER_HANDLER = CommandHandler(("removemars"), removetiger, run_async=True)
+UNURANUS_HANDLER = CommandHandler(("removeuranus"), removeuranus, run_async=True)
+UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removewolf"), removewhitelist, run_async=True)
 
-WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "jupiter"], whitelistlist)
-TIGERLIST_HANDLER = CommandHandler(["mars"], tigerlist)
-URANUSLIST_HANDLER = CommandHandler(["uranus"], uranuslist)
-SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "earth"], supportlist)
-SUDOLIST_HANDLER = CommandHandler(["sudolist", "venus"], sudolist)
-DEVLIST_HANDLER = CommandHandler(["devlist", "mercury"], devlist)
+WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "jupiter"], whitelistlist, run_async=True)
+TIGERLIST_HANDLER = CommandHandler(["mars"], tigerlist, run_async=True)
+URANUSLIST_HANDLER = CommandHandler(["uranus"], uranuslist, run_async=True)
+SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "earth"], supportlist, run_async=True)
+SUDOLIST_HANDLER = CommandHandler(["sudolist", "venus"], sudolist, run_async=True)
+DEVLIST_HANDLER = CommandHandler(["devlist", "mercury"], devlist, run_async=True)
 
 dispatcher.add_handler(SUDO_HANDLER)
 dispatcher.add_handler(SUPPORT_HANDLER)
