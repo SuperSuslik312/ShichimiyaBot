@@ -150,3 +150,6 @@ dmypy.json
 .pydevproject
 .directory
 .vscode
+
+# Extras
+testsaya2bot/
