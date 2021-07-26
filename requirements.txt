@@ -40,3 +40,4 @@ pybase64
 pySmartDL
 validators
 bs4
+multicolorcaptcha
