@@ -118,7 +118,7 @@ def ban(update: Update, context: CallbackContext) -> str:
         )
         if reason:
             reply += f"\n<code> </code><b>•  Reason:</b> \n{html.escape(reason)}"
-        bot.sendMessage(chat.id, reply, parse_mode=ParseMode.HTML, quote=False)
+        bot.sendMessage(chat.id, reply, parse_mode=ParseMode.HTML)
         return log
 
     except BadRequest as excp:
@@ -439,6 +439,3 @@ __handlers__ = [
     ROAR_HANDLER,
     PUNCHME_HANDLER,
 ]
-
-
-
