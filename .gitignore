@@ -11,6 +11,7 @@ updates.txt
 SayaBot/*.session
 SayaBot/*.session-journal
 saitama.session-journal
+saya.session-journal
 *.session
 
 # Byte-compiled / optimized / DLL files
