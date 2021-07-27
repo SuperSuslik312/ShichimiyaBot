@@ -94,7 +94,7 @@ def addsudo(update: Update, context: CallbackContext) -> str:
 
     update.effective_message.reply_text(
         rt
-        + "\nSuccessfully set Disaster level of {} to Venus!".format(
+        + "\nSuccessfully set Solar Union level of {} to Venus!".format(
             user_member.first_name
         )
     )
@@ -810,6 +810,7 @@ __handlers__ = [
     SUDOLIST_HANDLER,
     DEVLIST_HANDLER,
 ]
+
 
 
 
