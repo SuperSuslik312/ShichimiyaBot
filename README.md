@@ -11,6 +11,8 @@
 </p>
 <p align="center">
 <a href="https://github.com/ShaDisNX255/Saya2Bot" alt="GitHub Repo"> <img src="https://img.shields.io/badge/Repo-SayaBot-red" /> </a>
+<p align="center">
+<a href="https://t.me/SayaAman_bot" alt="SayaBot Link"> <img src="https://img.shields.io/badge/Bot-SayaBot-blue" /> </a>
 <a href="https://www.python.org/" alt="made-with-python"> <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?style=flat&logo=python&color=blue" /> </a>
 <a href="https://github.com/AnimeKaizoku/SaitamaRobot/blob/master/LICENSE" alt="GPLv3 license"> <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" /> </a>
 </p>
