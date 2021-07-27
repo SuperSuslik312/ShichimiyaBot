@@ -284,6 +284,16 @@ def pin(update: Update, context: CallbackContext) -> str:
             or args[0].lower() == "violent"
         )
 
+    message = update.effective_message
+    pinner = chat.get_member(user.id)
+
+    if (
+        not (pinner.can_pin_messages or pinner.status == "creator")
+        and user.id not in SUDO_USERS
+    ):
+        message.reply_text("You don't have the necessary rights to do that!")
+        return
+
     if prev_message and is_group:
         try:
             bot.pinChatMessage(
@@ -311,6 +321,15 @@ def unpin(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
     user = update.effective_user
+    message = update.effective_message
+    unpinner = chat.get_member(user.id)
+
+    if (
+        not (unpinner.can_pin_messages or unpinner.status == "creator")
+        and user.id not in SUDO_USERS
+    ):
+        message.reply_text("You don't have the necessary rights to do that!")
+        return
 
     try:
         bot.unpinChatMessage(chat.id)
@@ -354,7 +373,7 @@ def invite(update: Update, context: CallbackContext):
 
 
 @connection_status
-def adminlist(update, context):
+def adminlist(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat] -> unused variable
     user = update.effective_user  # type: Optional[User]
     args = context.args # -> unused variable
@@ -380,6 +399,8 @@ def adminlist(update, context):
     administrators = bot.getChatAdministrators(chat_id)
     text = "Admins in <b>{}</b>:".format(html.escape(update.effective_chat.title))
 
+    bot_admin_list = []
+
     for admin in administrators:
         user = admin.user
         status = admin.status
@@ -395,6 +416,7 @@ def adminlist(update, context):
             )
 
         if user.is_bot:
+            bot_admin_list.append(name)
             administrators.remove(admin)
             continue
 
@@ -453,6 +475,10 @@ def adminlist(update, context):
             text += "\n<code> • </code>{}".format(admin)
         text += "\n"
 
+    text += "\n🤖 Bots:"
+    for each_bot in bot_admin_list:
+        text += "\n<code> • </code>{}".format(each_bot)
+
     try:
         msg.edit_text(text, parse_mode=ParseMode.HTML)
     except BadRequest:  # if original message is deleted
@@ -465,11 +491,12 @@ __help__ = """
  • `/pin`*:* silently pins the message replied to - add `'loud'` or `'notify'` to give notifs to users
  • `/unpin`*:* unpins the currently pinned message
  • `/invitelink`*:* gets invitelink
- • `/link`*:* gets invitelink
+ • `/link`*:* same as invitelink
  • `/promote`*:* promotes the user replied to
  • `/demote`*:* demotes the user replied to
  • `/title <title here>`*:* sets a custom title for an admin that the bot promoted
  • `/admincache`*:* force refresh the admins list
+ • `/zombies`*:* scan and clean zombies
 """
 
 ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist, run_async=True)
@@ -516,4 +543,3 @@ __handlers__ = [
     SET_TITLE_HANDLER,
     ADMIN_REFRESH_HANDLER,
 ]
-
