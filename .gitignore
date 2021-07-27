@@ -6,6 +6,7 @@ SayaBot/config.ini
 log.txt
 kangsticker.png
 updates.txt
+error.txt
 
 # Session files
 SayaBot/*.session

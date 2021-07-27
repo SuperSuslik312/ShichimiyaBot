@@ -437,7 +437,6 @@ def user(update: Update, context: CallbackContext):
         caption=caption,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=False,
     )
     progress_message.delete()
 
@@ -578,4 +577,5 @@ __handlers__ = [
     KAYO_SEARCH_HANDLER,
     AIRING_HANDLER,
 ]
+
 
