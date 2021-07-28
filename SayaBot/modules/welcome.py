@@ -239,6 +239,19 @@ def new_member(update: Update, context: CallbackContext):
                 )
                 continue
 
+            # Welcome Support and Whitelist
+            elif new_mem.id in DEMONS and new_mem.id in TIGERS:
+                update.effective_message.reply_text(
+                    "Whoa! A Mars and Earth Solar Union member just joined! Stay Alert!",
+                    reply_to_message_id=reply,
+                )
+                welcome_log = (
+                    f"{html.escape(chat.title)}\n"
+                    f"#USER_JOINED\n"
+                    f"Bot Support and Whitelist just joined the group"
+                )
+                continue
+
             # Welcome Support
             elif new_mem.id in DEMONS:
                 update.effective_message.reply_text(
