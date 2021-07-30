@@ -7,6 +7,7 @@ log.txt
 kangsticker.png
 updates.txt
 error.txt
+shell_output.txt
 
 # Session files
 SayaBot/*.session
