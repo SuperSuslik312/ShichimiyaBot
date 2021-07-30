@@ -294,6 +294,9 @@ def info(update: Update, context: CallbackContext):
     elif user.id in DRAGONS:
         text += "\n\nThe Solar Union level of this person is 'Venus'."
         union_level_present = True
+    elif user.id in DEMONS and user.id in TIGERS:
+        text += "\n\nThe Solar Union level of this person is 'Earth' and 'Mars'."
+        union_level_present = True
     elif user.id in DEMONS:
         text += "\n\nThe Solar Union level of this person is 'Earth'."
         union_level_present = True
