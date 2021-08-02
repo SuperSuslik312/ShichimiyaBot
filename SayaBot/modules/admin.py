@@ -123,7 +123,7 @@ def demote(update: Update, context: CallbackContext) -> str:
 
     if (
         not (demoter.can_promote_members or demoter.status == "creator")
-        and user.id not in SUDO_USERS
+        and user.id not in DRAGONS
     ):
         message.reply_text("You don't have the necessary rights to do that!")
         return
@@ -289,7 +289,7 @@ def pin(update: Update, context: CallbackContext) -> str:
 
     if (
         not (pinner.can_pin_messages or pinner.status == "creator")
-        and user.id not in SUDO_USERS
+        and user.id not in DRAGONS
     ):
         message.reply_text("You don't have the necessary rights to do that!")
         return
@@ -326,7 +326,7 @@ def unpin(update: Update, context: CallbackContext) -> str:
 
     if (
         not (unpinner.can_pin_messages or unpinner.status == "creator")
-        and user.id not in SUDO_USERS
+        and user.id not in DRAGONS
     ):
         message.reply_text("You don't have the necessary rights to do that!")
         return
