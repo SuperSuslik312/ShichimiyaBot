@@ -41,4 +41,5 @@ pySmartDL
 validators
 bs4
 multicolorcaptcha
-
+gpytranslate
+pyYAML>=5.1.2
