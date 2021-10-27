@@ -5,7 +5,6 @@ from SayaBot.modules.sql.clear_cmd_sql import get_clearcmd
 from telegram import Bot, Update, ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackQueryHandler, CallbackContext, run_async
 from SayaBot import dispatcher
-from SayaBot.modules.disable import DisableAbleCommandHandler
 from SayaBot.modules.helper_funcs.misc import delete
 from youtubesearchpython import VideosSearch
 
@@ -40,8 +39,8 @@ def youtube(update: Update, context: CallbackContext):
         msg = "*Preparing to upload file:*\n"
         msg += f"`{title}`\n"
         delmsg = message.reply_text(
-            msg, 
-            parse_mode=ParseMode.MARKDOWN,            
+            msg,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup = InlineKeyboardMarkup(buttons)
         )
 
@@ -50,7 +49,7 @@ def youtube(update: Update, context: CallbackContext):
         )
 
     cleartime = get_clearcmd(chat.id, "youtube")
-    
+
     if cleartime:
         context.dispatcher.run_async(delete, delmsg, cleartime.time)
 
@@ -64,7 +63,7 @@ def youtube_callback(update: Update, context: CallbackContext):
     media = query.data.split(";")
     media_type = media[1]
     media_url = media[2]
-    
+
     if media_type == "audio":
         deltext = message.edit_text("Processing song...")
         opts = {
@@ -85,7 +84,7 @@ def youtube_callback(update: Update, context: CallbackContext):
         }
 
         codec = "mp3"
-        
+
         with YoutubeDL(opts) as rip:
             rip_data = rip.extract_info(media_url, download=False, process=False)
             if int(rip_data['duration'] / 60) < 10:
@@ -117,7 +116,7 @@ def youtube_callback(update: Update, context: CallbackContext):
         "nocheckcertificate": True,
         "postprocessors": [
             {
-                "key": "FFmpegVideoConvertor", 
+                "key": "FFmpegVideoConvertor",
                 "preferedformat": "mp4",
             }
         ],
@@ -160,12 +159,12 @@ def youtube_callback(update: Update, context: CallbackContext):
         pass
 
     cleartime = get_clearcmd(chat.id, "youtube")
-    
+
     if cleartime:
         context.dispatcher.run_async(delete, delmsg, cleartime.time)
 
 
-YOUTUBE_HANDLER = DisableAbleCommandHandler(["youtube", "yt"], youtube, run_async = True)
+YOUTUBE_HANDLER = CommandHandler(["youtube", "yt"], youtube, run_async = True)
 YOUTUBE_CALLBACKHANDLER = CallbackQueryHandler(
     youtube_callback, pattern="youtube*", run_async=True
 )

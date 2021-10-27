@@ -14,10 +14,9 @@ from base64 import b64decode
 from pySmartDL import SmartDL
 from telethon.tl.types import DocumentAttributeVideo, DocumentAttributeAudio
 from telethon import events
-
+from telegram.ext import CommandHandler
 from SayaBot import dispatcher
 from SayaBot import telethn
-from SayaBot.modules.disable import DisableAbleCommandHandler
 from SayaBot.utils import progress
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
@@ -199,8 +198,8 @@ async def video(v_url):
         pass
 
 
-SONG_HANDLER = DisableAbleCommandHandler("song", song)
-VIDEO_HANDLER = DisableAbleCommandHandler("video", video)
+SONG_HANDLER = CommandHandler("song", song)
+VIDEO_HANDLER = CommandHandler("video", video)
 
 dispatcher.add_handler(SONG_HANDLER)
 dispatcher.add_handler(VIDEO_HANDLER)
