@@ -51,6 +51,8 @@ from telegram.ext import (
 )
 from telegram.utils.helpers import escape_markdown, mention_html, mention_markdown
 
+                                                                   
+
 VALID_WELCOME_FORMATTERS = [
     "first",
     "last",
@@ -152,12 +154,15 @@ def send(update, message, keyboard, backup_message):
         else:
             msg = update.effective_message.reply_text(
                 markdown_parser(
+                     
+                                      
                     backup_message + "\nNote: An error occured when sending the "
                     "custom message. Please update."
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
+
             LOGGER.exception()
     return msg
 
@@ -315,29 +320,9 @@ def new_member(update: Update, context: CallbackContext):
 
             # Welcome yourself
             elif new_mem.id == bot.id:
-                creator = None
-                for x in bot.bot.get_chat_administrators(update.effective_chat.id):
-                    if x.status == "creator":
-                        creator = x.user
-                        break
-                if creator:
-                    bot.send_message(
-                        JOIN_LOGGER,
-                        "#NEW_GROUP\n<b>Group name:</b> {}\n<b>ID:</b> <code>{}</code>\n<b>Creator:</b> <code>{}</code>".format(
-                            html.escape(chat.title), chat.id, html.escape(creator)
-                        ),
-                        parse_mode=ParseMode.HTML,
-                    )
-                else:
-                    bot.send_message(
-                        JOIN_LOGGER,
-                        "#NEW_GROUP\n<b>Group name:</b> {}\n<b>ID:</b> <code>{}</code>".format(
-                            html.escape(chat.title), chat.id
-                        ),
-                        parse_mode=ParseMode.HTML,
-                    )
                 update.effective_message.reply_text(
-                    "Watashi ga kita!", reply_to_message_id=reply
+                    "Watashi ga kita!",
+                    reply_to_message_id=reply,
                 )
                 continue
 
@@ -366,7 +351,7 @@ def new_member(update: Update, context: CallbackContext):
                         fullname = escape_markdown(f"{first_name} {new_mem.last_name}")
                     else:
                         fullname = escape_markdown(first_name)
-                    count = chat.get_member_count()
+                    count = chat.get_members_count()
                     mention = mention_markdown(new_mem.id, escape_markdown(first_name))
                     if new_mem.username:
                         username = "@" + escape_markdown(new_mem.username)
@@ -716,7 +701,7 @@ def left_member(update: Update, context: CallbackContext):
                     fullname = escape_markdown(f"{first_name} {left_mem.last_name}")
                 else:
                     fullname = escape_markdown(first_name)
-                count = chat.get_member_count()
+                count = chat.get_members_count()
                 mention = mention_markdown(left_mem.id, first_name)
                 if left_mem.username:
                     username = "@" + escape_markdown(left_mem.username)
@@ -842,6 +827,9 @@ def goodbye(update: Update, context: CallbackContext):
                 keyboard = InlineKeyboardMarkup(keyb)
 
                 send(update, goodbye_m, keyboard, sql.DEFAULT_GOODBYE)
+
+                      
+                                                           
 
         else:
             if noformat:
@@ -1093,6 +1081,23 @@ def cleanservice(update: Update, context: CallbackContext) -> str:
                 "Welcome clean service is : off", parse_mode=ParseMode.MARKDOWN
             )
 
+                        
+                     
+                                
+                                                 
+                                                                                 
+                                  
+                                                
+                                                                                
+             
+                                                
+                                                               
+             
+         
+                                            
+                                                                      
+         
+
 
 def user_button(update: Update, context: CallbackContext):
     chat = update.effective_chat
@@ -1158,6 +1163,7 @@ def user_button(update: Update, context: CallbackContext):
         query.answer(text="You're not allowed to do this!")
 
 def user_captcha_button(update: Update, context: CallbackContext):
+                         
     chat = update.effective_chat
     user = update.effective_user
     query = update.callback_query
@@ -1276,6 +1282,7 @@ WELC_MUTE_HELP_TXT = (
     "*Note:* Strong/Captcha mode kicks a user from the chat if they dont verify in 120seconds. They can always rejoin though"
 )
 
+
 @user_admin
 def welcome_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
@@ -1372,18 +1379,39 @@ user joined chat, user left chat.
  • `/welcomehelp`*:* view more formatting information for custom welcome/goodbye messages.
 """
 
+                                 
 NEW_MEM_HANDLER = MessageHandler(Filters.status_update.new_chat_members, new_member, run_async=True)
+ 
+                                  
 LEFT_MEM_HANDLER = MessageHandler(Filters.status_update.left_chat_member, left_member, run_async=True)
+ 
+                                   
 WELC_PREF_HANDLER = CommandHandler("welcome", welcome, filters=Filters.chat_type.groups, run_async=True)
+ 
+                                      
 GOODBYE_PREF_HANDLER = CommandHandler("goodbye", goodbye, filters=Filters.chat_type.groups, run_async=True)
+ 
+                             
 SET_WELCOME = CommandHandler("setwelcome", set_welcome, filters=Filters.chat_type.groups, run_async=True)
+ 
+                             
 SET_GOODBYE = CommandHandler("setgoodbye", set_goodbye, filters=Filters.chat_type.groups, run_async=True)
+ 
+                               
 RESET_WELCOME = CommandHandler("resetwelcome", reset_welcome, filters=Filters.chat_type.groups, run_async=True)
+ 
+                               
 RESET_GOODBYE = CommandHandler("resetgoodbye", reset_goodbye, filters=Filters.chat_type.groups, run_async=True)
+ 
+                                     
 WELCOMEMUTE_HANDLER = CommandHandler("welcomemute", welcomemute, filters=Filters.chat_type.groups, run_async=True)
+ 
 CLEAN_SERVICE_HANDLER = CommandHandler(
     "cleanservice", cleanservice, filters=Filters.chat_type.groups, run_async=True
 )
+                               
+                                                                                   
+ 
 CLEAN_WELCOME = CommandHandler("cleanwelcome", clean_welcome, filters=Filters.chat_type.groups, run_async=True)
 WELCOME_HELP = CommandHandler("welcomehelp", welcome_help, run_async=True)
 WELCOME_MUTE_HELP = CommandHandler("welcomemutehelp", welcome_mute_help, run_async=True)
