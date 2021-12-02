@@ -2,12 +2,12 @@ import threading
 from typing import Union
 
 from SayaBot.modules.sql import BASE, SESSION
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, BigInteger, String
 
 
 class ReportingUserSettings(BASE):
     __tablename__ = "user_report_settings"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     should_report = Column(Boolean, default=True)
 
     def __init__(self, user_id):
@@ -88,4 +88,5 @@ def migrate_chat(old_chat_id, new_chat_id):
         for note in chat_notes:
             note.chat_id = str(new_chat_id)
         SESSION.commit()
+
 

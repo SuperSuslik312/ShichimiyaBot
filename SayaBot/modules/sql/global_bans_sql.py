@@ -1,12 +1,12 @@
 import threading
 
 from SayaBot.modules.sql import BASE, SESSION
-from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
+from sqlalchemy import Boolean, Column, BigInteger, String, UnicodeText
 
 
 class GloballyBannedUsers(BASE):
     __tablename__ = "gbans"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     name = Column(UnicodeText, nullable=False)
     reason = Column(UnicodeText)
 
@@ -164,4 +164,5 @@ def migrate_chat(old_chat_id, new_chat_id):
 # Create in memory userid to avoid disk access
 __load_gbanned_userid_list()
 __load_gban_stat_list()
+
 
