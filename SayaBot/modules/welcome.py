@@ -1081,24 +1081,6 @@ def cleanservice(update: Update, context: CallbackContext) -> str:
                 "Welcome clean service is : off", parse_mode=ParseMode.MARKDOWN
             )
 
-                        
-                     
-                                
-                                                 
-                                                                                 
-                                  
-                                                
-                                                                                
-             
-                                                
-                                                               
-             
-         
-                                            
-                                                                      
-         
-
-
 def user_button(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -1110,7 +1092,7 @@ def user_button(update: Update, context: CallbackContext):
 
     if join_user == user.id:
         sql.set_human_checks(user.id, chat.id)
-        member_dict = VERIFIED_USER_WAITLIST.pop(user.id)
+        member_dict = VERIFIED_USER_WAITLIST[(chat.id, user.id)]
         member_dict["status"] = True
         VERIFIED_USER_WAITLIST.update({user.id: member_dict})
         query.answer(text="Yeet! You're a human, unmuted!")
@@ -1181,7 +1163,7 @@ def user_captcha_button(update: Update, context: CallbackContext):
         c_captcha_ans = CAPTCHA_ANS_DICT.pop((join_chat, join_user))
         if c_captcha_ans == captcha_ans:
             sql.set_human_checks(user.id, chat.id)
-            member_dict = VERIFIED_USER_WAITLIST.pop(user.id)
+            member_dict = VERIFIED_USER_WAITLIST[(chat.id, user.id)]
             member_dict["status"] = True
             query.answer(text="Yeet! You're a human, unmuted!")
             bot.restrict_chat_member(
