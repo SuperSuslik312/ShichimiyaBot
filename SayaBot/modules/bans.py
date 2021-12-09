@@ -1,4 +1,5 @@
 import html
+from typing import Optional
 
 from telegram import ParseMode, Update
 from telegram.error import BadRequest
@@ -44,9 +45,29 @@ def ban(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     message = update.effective_message
-    log_message = ""
-    bot = context.bot
     args = context.args
+    log_message = ""
+    reason = ""
+    bot = context.bot
+    log_message = ""
+    reason = ""
+    if message.reply_to_message and message.reply_to_message.sender_chat:
+        r = bot._request.post(bot.base_url + '/banChatSenderChat', {
+            'sender_chat_id': message.reply_to_message.sender_chat.id,
+            'chat_id': chat.id
+        },
+                              )
+        if r:
+            message.reply_text("Channel {} was banned successfully from {}".format(
+                html.escape(message.reply_to_message.sender_chat.title),
+                html.escape(chat.title)
+            ),
+                parse_mode="html"
+            )
+        else:
+            message.reply_text("Failed to ban channel")
+        return
+
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
@@ -326,6 +347,22 @@ def unban(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     log_message = ""
     bot, args = context.bot, context.args
+    if message.reply_to_message and message.reply_to_message.sender_chat:
+        r = bot._request.post(bot.base_url + '/unbanChatSenderChat', {
+            'sender_chat_id': message.reply_to_message.sender_chat.id,
+            'chat_id': chat.id
+        },
+                              )
+        if r:
+            message.reply_text("Channel {} was unbanned successfully from {}".format(
+                html.escape(message.reply_to_message.sender_chat.title),
+                html.escape(chat.title)
+            ),
+                parse_mode="html"
+            )
+        else:
+            message.reply_text("Failed to unban channel")
+        return
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
