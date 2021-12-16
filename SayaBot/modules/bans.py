@@ -7,6 +7,7 @@ from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import mention_html
 
 from SayaBot import (
+    BAN_STICKER,
     DEV_USERS,
     LOGGER,
     OWNER_ID,
@@ -115,6 +116,7 @@ def ban(update: Update, context: CallbackContext) -> str:
             return ""
     else:
         silent = False
+    context.bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
     log = (
         f"<b>{html.escape(chat.title)}:</b>\n"
         f"#{'S' if silent else ''}BANNED\n"
@@ -137,6 +139,7 @@ def ban(update: Update, context: CallbackContext) -> str:
             f"<code>❕</code><b>Ban Event</b>\n"
             f"<code> </code><b>•  User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}"
         )
+        context.bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         if reason:
             reply += f"\n<code> </code><b>•  Reason:</b> \n{html.escape(reason)}"
         bot.sendMessage(chat.id, reply, parse_mode=ParseMode.HTML)
@@ -225,6 +228,7 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.kick_member(user_id, until_date=bantime)
+        bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
             f"Banned! User {mention_html(member.user.id, html.escape(member.user.first_name))} "
@@ -295,6 +299,7 @@ def punch(update: Update, context: CallbackContext) -> str:
 
     res = chat.unban_member(user_id)  # unban on current user = kick
     if res:
+        bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
             f"Get out {mention_html(member.user.id, html.escape(member.user.first_name))}, B-baka!! .",
