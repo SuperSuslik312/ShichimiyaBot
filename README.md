@@ -10,8 +10,8 @@
 
 </p>
 <p align="center">
-<a href="https://github.com/SuperSuslik312/ShichimiyaBot" alt="GitHub Repo"> <img src="https://img.shields.io/badge/Repo-SayaBot-red" /> </a>
-<a href="https://t.me/ShichimiyaAdminBot" alt="ShichimiyaBot Link"> <img src="https://img.shields.io/badge/Bot-SayaBot-blue" /> </a>
+<a href="https://github.com/SuperSuslik312/ShichimiyaBot" alt="GitHub Repo"> <img src="https://img.shields.io/badge/Repo-ShichimiyaBot-red" /> </a>
+<a href="https://t.me/ShichimiyaAdminBot" alt="ShichimiyaBot Link"> <img src="https://img.shields.io/badge/Bot-ShichimiyaBot-blue" /> </a>
 <a href="https://www.python.org/" alt="made-with-python"> <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?style=flat&logo=python&color=blue" /> </a>
 <a href="https://github.com/AnimeKaizoku/SaitamaRobot/blob/master/LICENSE" alt="GPLv3 license"> <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" /> </a>
 </p>
