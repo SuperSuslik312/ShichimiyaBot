@@ -1,5 +1,5 @@
 # We're using Debian Slim Buster image
-FROM python:3.8.5-slim-buster
+FROM python:3.9-slim-buster
 
 ENV PIP_NO_CACHE_DIR 1
 
@@ -62,14 +62,10 @@ RUN apt update && apt upgrade -y && \
     && rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
 
 # Pypi package Repo upgrade
-RUN pip3 install --upgrade pip setuptools
+RUN pip3 install --upgrade pip
 
-# Copy Python Requirements to /root/SayaBot
-RUN git clone -b shiken https://github.com/AnimeKaizoku/SayaBot /root/SayaBot
-WORKDIR /root/SayaBot
-
-#Copy config file to /root/SayaBot/SayaBot
-COPY ./SayaBot/sample_config.py ./SayaBot/config.py* /root/SayaBot/SayaBot/
+ADD . /app/
+WORKDIR /app
 
 ENV PATH="/home/bot/bin:$PATH"
 

@@ -26,7 +26,7 @@
 
 Satone Shichimiya is a simple solution to your group management needs, purely weeab themed.
 
-* Bot Link:  [SayaBot](https://t.me/ShichimiyaAdminBot)
+* Bot Link:  [ShichimiyaBot](https://t.me/ShichimiyaAdminBot)
 
 ## Credits 📍
 * Well, it's all in the commit history 

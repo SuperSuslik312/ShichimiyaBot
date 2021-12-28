@@ -77,11 +77,8 @@ Hi {}, my name is {}!
 I am an Anime themed group management bot.
 I specialize in managing anime and similar themed groups.
 You can find my list of available commands with /help.
-[Saya's Repo](https://github.com/ShaDisNX/Saya_bot)
-[SayaBot's Repo](https://github.com/AnimeKaizoku/SayaBot)
+[Shichimiya's Repo](https://github.com/SuperSuslik312/ShichimiyaBot)
 [Kigyō's Repo](https://github.com/Dank-del/EnterpriseALRobot)
-Saya Bot specifically edited by @ShaDisNX255
-Special thanks to @Roddyboii for the idea and suggestions
 """
 
 HELP_STRINGS = """
@@ -102,12 +99,11 @@ And the following:
     "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
 )
 
-SAYA_IMG = "https://dthezntil550i.cloudfront.net/nl/latest/nl1902201426381960008179947/1280_960/e8504f0d-a3a9-404d-9734-1ceea2d5753c.png"
+SAYA_IMG = "https://te.legra.ph/file/d2224132104ace277a048.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
- You can support the project via [Paypal](paypal.me/ShaDisNX255) or by contacting @ShaDisNX255 \
- Supporting isnt always financial! \
- Those who cannot provide monetary support are welcome to help us develop the bot at @SayaBotSupport."""
+ You can support the project via [Paypal](paypal.me/SuperSuslik312) or by contacting @SuperSuslik312 \
+ Supporting isnt always financial!"""
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -226,7 +222,7 @@ def start(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="☑️ Add Saya to your group",
+                                text="☑️ Add Shichimiya to your group",
                                 url="t.me/{}?startgroup=true".format(
                                     context.bot.username
                                 ),
@@ -239,7 +235,7 @@ def start(update: Update, context: CallbackContext):
                             ),
                             InlineKeyboardButton(
                                 text="🔔 Updates Channel",
-                                url="https://t.me/Saya_GBans",
+                                url="https://t.me/SuperSuslik312c",
                             ),
                         ],
                         [
@@ -251,7 +247,7 @@ def start(update: Update, context: CallbackContext):
                         [
                             InlineKeyboardButton(
                                 text="🗄 Source code",
-                                url="https://github.com/ShaDisNX255/Saya2Bot",
+                                url="https://github.com/SuperSuslik312/ShichimiyaBot",
                             )
                         ],
                     ]
@@ -583,7 +579,7 @@ def donate(update: Update, context: CallbackContext):
             DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
         )
 
-        if OWNER_ID != 254318997 and DONATION_LINK:
+        if OWNER_ID != 600445419 and DONATION_LINK:
             update.effective_message.reply_text(
                 "You can also donate to the person currently running me "
                 "[here]({})".format(DONATION_LINK),
