@@ -24,7 +24,7 @@
 
 
 
-Saya is a simple solution to your group management needs, purely weeab themed.
+Satone Shichimiya is a simple solution to your group management needs, purely weeab themed.
 
 * Bot Link:  [SayaBot](https://t.me/ShichimiyaAdminBot)
 
