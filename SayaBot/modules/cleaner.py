@@ -17,7 +17,6 @@ from telegram.ext import (
     MessageHandler,
     run_async,
 )
-from SayaBot.modules.language import gs
 
 CMD_STARTERS = ("/", "!") if ALLOW_EXCL else "/"
 BLUE_TEXT_CLEAN_GROUP = 13
@@ -214,8 +213,17 @@ def bluetext_ignore_list(update: Update, context: CallbackContext):
     return
 
 
-def __help__(chat):
-    return gs(chat, "cleaner_help")
+__help__ = """
+Blue text cleaner removed any made up commands that people send in your chat.
+ • `/cleanblue <on/off/yes/no>`*:* clean commands after sending
+ • `/ignoreblue <word>`*:* prevent auto cleaning of the command
+ • `/unignoreblue <word>`*:* remove prevent auto cleaning of the command
+ • `/listblue`*:* list currently whitelisted commands
+ 
+ *Following are Solar Union only commands, admins cannot use these:*
+ • `/gignoreblue <word>`*:* globally ignorea bluetext cleaning of saved word across Saitama.
+ • `/ungignoreblue <word>`*:* remove said command from global cleaning list
+"""
 
 SET_CLEAN_BLUE_TEXT_HANDLER = CommandHandler("cleanblue", set_blue_text_must_click, run_async=True)
 ADD_CLEAN_BLUE_TEXT_HANDLER = CommandHandler("ignoreblue", add_bluetext_ignore, run_async=True)

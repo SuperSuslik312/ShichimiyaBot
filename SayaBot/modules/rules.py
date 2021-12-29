@@ -15,7 +15,6 @@ from telegram import (
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import escape_markdown
-from SayaBot.modules.language import gs
 
 
 def get_rules(update: Update, context: CallbackContext):
@@ -129,8 +128,13 @@ def __chat_settings__(chat_id, user_id):
     return f"This chat has had it's rules set: `{bool(sql.get_rules(chat_id))}`"
 
 
-def __help__(chat):
-    return gs(chat, "rules_help")
+__help__ = """
+ • `/rules`*:* get the rules for this chat.
+
+*Admins only:*
+ • `/setrules <your rules here>`*:* set the rules for this chat.
+ • `/clearrules`*:* clear the rules for this chat.
+"""
 
 __mod_name__ = "Rules"
 
