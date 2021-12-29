@@ -6,7 +6,6 @@ from SayaBot import TIME_API_KEY, dispatcher
 from SayaBot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, run_async
-from SayaBot.modules.language import gs
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
@@ -91,8 +90,12 @@ def gettime(update: Update, context: CallbackContext):
     )
 
 
-def __help__(chat):
-    return gs(chat, "gettime_help")
+__help__ = """
+ • `/time <query>`*:* Gives information about a timezone.
+
+*Available queries:* Country Code/Country Name/Timezone Name
+• 🕐 [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+"""
 
 TIME_HANDLER = DisableAbleCommandHandler("time", gettime, run_async=True)
 

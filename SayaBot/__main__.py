@@ -27,7 +27,6 @@ from SayaBot import (
 from SayaBot.modules import ALL_MODULES
 from SayaBot.modules.helper_funcs.chat_status import is_user_admin
 from SayaBot.modules.helper_funcs.misc import paginate_modules
-from SayaBot.modules.language import gs
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
@@ -73,25 +72,38 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 
-# PM_START_TEXT = """
-# Hi {}, my name is {}!
-# I am an Anime themed group management bot.
-# I specialize in managing anime and similar themed groups.
-# You can find my list of available commands with /help.
-# [Shichimiya's Repo](https://github.com/SuperSuslik312/ShichimiyaBot)
-# [Kigyō's Repo](https://github.com/Dank-del/EnterpriseALRobot)
-# """
+PM_START_TEXT = """
+Hi {}, my name is {}! 
+I am an Anime themed group management bot.
+I specialize in managing anime and similar themed groups.
+You can find my list of available commands with /help.
+[Shichimiya's Repo](https://github.com/SuperSuslik312/ShichimiyaBot)
+[Kigyō's Repo](https://github.com/Dank-del/EnterpriseALRobot)
+"""
 
-# HELP_STRINGS = gs(update.effective_chat.id, "pm_help_text").format(
-#     dispatcher.bot.first_name,
-#     "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
-# )
+HELP_STRINGS = """
+Hey there! My name is *{}*.
+Have a look at the following for an idea of some of \
+the things I can help you with.
+*Main* commands available:
+ • /help: PM's you this message.
+ • /help <module name>: PM's you info about that module.
+ • /donate: information on how to donate!
+ • /settings:
+   • in PM: will send you your settings for all supported modules.
+   • in a group: will redirect you to pm, with all that chat's settings.
+{}
+And the following:
+""".format(
+    dispatcher.bot.first_name,
+    "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
+)
 
 SAYA_IMG = "https://te.legra.ph/file/d2224132104ace277a048.jpg"
 
-# DONATE_STRING = """Heya, glad to hear you want to donate!
-#  You can support the project via [Paypal](paypal.me/SuperSuslik312) or by contacting @SuperSuslik312 \
-#  Supporting isnt always financial!"""
+DONATE_STRING = """Heya, glad to hear you want to donate!
+ You can support the project via [Paypal](paypal.me/SuperSuslik312) or by contacting @SuperSuslik312 \
+ Supporting isnt always financial!"""
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -165,10 +177,6 @@ def test(update: Update, context: CallbackContext):
 
 
 def start(update: Update, context: CallbackContext):
-    HELP_STRINGS = gs(update.effective_chat.id, "pm_help_text").format(
-        dispatcher.bot.first_name,
-        "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
-    )
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -206,16 +214,15 @@ def start(update: Update, context: CallbackContext):
             first_name = update.effective_user.first_name
             update.effective_message.reply_photo(
                 SAYA_IMG,
-                gs(update.effective_chat.id, "pm_start_text").format(
-                    escape_markdown(first_name),
-                    escape_markdown(context.bot.first_name),
+                PM_START_TEXT.format(
+                    escape_markdown(first_name), escape_markdown(context.bot.first_name)
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
-                                text=gs(update.effective_chat.id, "add_bot_to_group_btn"),
+                                text="☑️ Add Shichimiya to your group",
                                 url="t.me/{}?startgroup=true".format(
                                     context.bot.username
                                 ),
@@ -223,23 +230,23 @@ def start(update: Update, context: CallbackContext):
                         ],
                         [
                             InlineKeyboardButton(
-                                text=gs(update.effective_chat.id, "support_chat_link_btn"),
+                                text="🚑 Support Group",
                                 url=f"https://t.me/{SUPPORT_CHAT}",
                             ),
                             InlineKeyboardButton(
-                                text=gs(update.effective_chat.id, "updates_channel_link_btn"),
+                                text="🔔 Updates Channel",
                                 url="https://t.me/SuperSuslik312c",
                             ),
                         ],
                         [
                             InlineKeyboardButton(
-                                text=gs(update.effective_chat.id, "getting_started"),
+                                text="🧾 Getting started guide",
                                 url="https://t.me/SayaBotSupport/24",
                             )
                         ],
                         [
                             InlineKeyboardButton(
-                                text=gs(update.effective_chat.id, "src_btn"),
+                                text="🗄 Source code",
                                 url="https://github.com/SuperSuslik312/ShichimiyaBot",
                             )
                         ],
@@ -248,7 +255,7 @@ def start(update: Update, context: CallbackContext):
             )
     else:
         update.effective_message.reply_text(
-            gs(update.effective_chat.id, "grp_start_text").format(
+            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
@@ -286,10 +293,6 @@ def error_callback(update: Update, context: CallbackContext):
 
 
 def help_button(update, context):
-    HELP_STRINGS = gs(update.effective_chat.id, "pm_help_text").format(
-        dispatcher.bot.first_name,
-        "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
-    )
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -305,7 +308,7 @@ def help_button(update, context):
                 "Here is the help for the *{}* module:\n".format(
                     HELPABLE[module].__mod_name__
                 )
-                + HELPABLE[module].__help__(update.effective_chat.id)
+                + HELPABLE[module].__help__
             )
             query.message.edit_text(
                 text=text,
@@ -354,10 +357,6 @@ def help_button(update, context):
 
 
 def get_help(update: Update, context: CallbackContext):
-    HELP_STRINGS = gs(update.effective_chat.id, "pm_help_text").format(
-        dispatcher.bot.first_name,
-        "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n",
-    )
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
 
@@ -402,7 +401,7 @@ def get_help(update: Update, context: CallbackContext):
             "Here is the available help for the *{}* module:\n".format(
                 HELPABLE[module].__mod_name__
             )
-            + HELPABLE[module].get_help
+            + HELPABLE[module].__help__
         )
         send_help(
             chat.id,
@@ -577,7 +576,7 @@ def donate(update: Update, context: CallbackContext):
     bot = context.bot
     if chat.type == "private":
         update.effective_message.reply_text(
-            gs(chat.id, "donate"), parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
+            DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
         )
 
         if OWNER_ID != 600445419 and DONATION_LINK:
@@ -591,7 +590,7 @@ def donate(update: Update, context: CallbackContext):
         try:
             bot.send_message(
                 user.id,
-                gs(chat.id, "donate"),
+                DONATE_STRING,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
             )

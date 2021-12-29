@@ -34,7 +34,6 @@ from SayaBot.modules.helper_funcs.chat_status import (
 from SayaBot.modules.helper_funcs.extraction import extract_user_and_text
 from SayaBot.modules.helper_funcs.string_handling import extract_time
 from SayaBot.modules.log_channel import gloggable, loggable
-from SayaBot.modules.language import gs
 
 
 @connection_status
@@ -449,8 +448,15 @@ def selfunban(context: CallbackContext, update: Update) -> str:
     return log
 
 
-def __help__(chat):
-    return gs(chat, "bans_help")
+__help__ = """
+  • `/kickme`*:* kicks the user who issued the command
+*Admins only:*
+ • `/ban <userhandle>`*:* bans a user. (via handle, or reply)
+ • `/sban <userhandle>`*:* Silently ban a user. Deletes command, Replied message and doesn't reply. (via handle, or reply)
+ • `/tban <userhandle> x(m/h/d)`*:* bans a user for `x` time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
+ • `/unban <userhandle>`*:* unbans a user. (via handle, or reply)
+ • `/kick <userhandle>`*:* Kicks a user out of the group, (via handle, or reply)
+"""
 
 BAN_HANDLER = CommandHandler(["ban", "sban"], ban, run_async=True)
 TEMPBAN_HANDLER = CommandHandler("tban", temp_ban, run_async=True)

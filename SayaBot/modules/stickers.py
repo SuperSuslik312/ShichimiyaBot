@@ -13,7 +13,6 @@ from telegram.utils.helpers import mention_html
 
 from SayaBot import dispatcher
 from SayaBot.modules.disable import DisableAbleCommandHandler
-from SayaBot.modules.language import gs
 
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 
@@ -447,8 +446,12 @@ def makepack_internal(
         msg.reply_text("Failed to create sticker pack. Possibly due to blek mejik.")
 
 
-def __help__(chat):
-    return gs(chat, "stickers_help")
+__help__ = """
+• `/stickerid`*:* reply to a sticker to me to tell you its file ID.
+• `/getsticker`*:* reply to a sticker to me to upload its raw PNG file.
+• `/kang`*:* reply to a sticker to add it to your pack.
+• `/stickers`*:* Find stickers for given term on combot sticker catalogue
+"""
 
 __mod_name__ = "Stickers"
 STICKERID_HANDLER = DisableAbleCommandHandler("stickerid", stickerid, run_async=True)
