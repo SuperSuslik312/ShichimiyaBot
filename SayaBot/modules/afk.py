@@ -7,6 +7,7 @@ from SayaBot.modules.disable import (
 )
 from SayaBot.modules.sql import afk_sql as sql
 from SayaBot.modules.users import get_user_id
+from SayaBot.modules.language import gs
 from telegram import MessageEntity, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, Filters, MessageHandler, run_async
@@ -139,11 +140,8 @@ def __gdpr__(user_id):
     sql.rm_afk(user_id)
 
 
-__help__ = """
- • `/afk <reason>`*:* mark yourself as AFK(away from keyboard).
- • `brb <reason>`*:* same as the afk command - but not a command.
-When marked as AFK, any mentions will be replied to with a message to say you're not available!
-"""
+def __help__(chat):
+    return gs(chat, "afk_help")
 
 AFK_HANDLER = DisableAbleCommandHandler("afk", afk, run_async=True)
 AFK_REGEX_HANDLER = DisableAbleMessageHandler(

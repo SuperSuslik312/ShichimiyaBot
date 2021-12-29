@@ -3,7 +3,7 @@ from SayaBot.modules.language import gs
 from SayaBot.modules.disable import DisableAbleCommandHandler
 from SayaBot import dispatcher
 
-def get_help(chat):
+def __help__(chat):
     return gs(chat, "gtranslate_help")
 
 __mod_name__ = "Translator"

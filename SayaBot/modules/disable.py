@@ -14,6 +14,7 @@ from telegram.ext import (
     RegexHandler,
 )
 from telegram.utils.helpers import escape_markdown
+from SayaBot.modules.language import gs
 
 FILENAME = __name__.rsplit(".", 1)[-1]
 
@@ -331,16 +332,8 @@ if is_module_loaded(FILENAME):
     dispatcher.add_handler(COMMANDS_HANDLER)
     dispatcher.add_handler(TOGGLE_HANDLER)
 
-    __help__ = """
-    • `/cmds`*:* check the current status of disabled commands
-
-    *Admins only:*
-    • `/enable <cmd name>`*:* enable that command
-    • `/disable <cmd name>`*:* disable that command
-    • `/enablemodule <module name>`*:* enable all commands in that module
-    • `/disablemodule <module name>`*:* disable all commands in that module
-    • `/listcmds`*:* list all possible toggleable commands
-    """
+    def __help__(chat):
+        return gs(chat, "disable_help")
 
     __mod_name__ = "Command disabling"
 

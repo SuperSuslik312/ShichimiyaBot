@@ -8,7 +8,6 @@
 - x -|│  “	Just some code kanged from other code. ”  │| - x -
 </p>
 
-</p>
 <p align="center">
 <a href="https://github.com/SuperSuslik312/ShichimiyaBot" alt="GitHub Repo"> <img src="https://img.shields.io/badge/Repo-ShichimiyaBot-red" /> </a>
 <a href="https://t.me/ShichimiyaAdminBot" alt="ShichimiyaBot Link"> <img src="https://img.shields.io/badge/Bot-ShichimiyaBot-blue" /> </a>

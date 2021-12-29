@@ -18,6 +18,7 @@ from SayaBot.modules.helper_funcs.string_handling import extract_time
 from SayaBot.modules.connection import connected
 from SayaBot.modules.sql.approve_sql import is_approved
 from SayaBot.modules.helper_funcs.alternate import send_message, typing_action
+from SayaBot.modules.language import gs
 
 BLACKLIST_GROUP = 11
 
@@ -446,20 +447,9 @@ def __stats__():
 
 __mod_name__ = "Blacklists"
 
-__help__ = """
+def __help__(chat):
+    return gs(chat, "blacklist_help")
 
-Blacklists are used to stop certain triggers from being said in a group. Any time the trigger is mentioned, the message will immediately be deleted. A good combo is sometimes to pair this up with warn filters!
-
-*NOTE*: Blacklists do not affect group admins.
-
- • `/blacklist`*:* View the current blacklisted words.
-
-Admin only:
- • `/addblacklist <triggers>`*:* Add a trigger to the blacklist. Each line is considered one trigger, so using different lines will allow you to add multiple triggers.
- • `/unblacklist <triggers>`*:* Remove triggers from the blacklist. Same newline logic applies here, so you can remove multiple triggers at once.
- • `/blacklistmode <off/del/warn/ban/kick/mute/tban/tmute>`*:* Action to perform when someone sends blacklisted words.
-
-"""
 BLACKLIST_HANDLER = DisableAbleCommandHandler(
     "blacklist", blacklist, pass_args=True, admin_ok=True, run_async=True
 )
