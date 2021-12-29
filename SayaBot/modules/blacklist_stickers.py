@@ -17,6 +17,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, Filters, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram.utils.helpers import mention_html, mention_markdown
+from SayaBot.modules.language import gs
 
 
 def blackliststicker(update: Update, context: CallbackContext):
@@ -489,18 +490,8 @@ def __stats__():
     )
 
 
-__help__ = """
-Blacklist sticker is used to stop certain stickers. Whenever a sticker is sent, the message will be deleted immediately.
-*NOTE:* Blacklist stickers do not affect the group admin
- • `/blsticker`*:* See current blacklisted sticker
-*Only admin:*
- • `/addblsticker <sticker link>`*:* Add the sticker trigger to the black list. Can be added via reply sticker
- • `/unblsticker <sticker link>`*:* Remove triggers from blacklist. The same newline logic applies here, so you can delete multiple triggers at once
- • `/rmblsticker <sticker link>`*:* Same as above
- • `/blstickermode <ban/tban/mute/tmute>`*:* sets up a default action on what to do if users use blacklisted stickers
-Note:
- • `<sticker link>` can be `https://t.me/addstickers/<sticker>` or just `<sticker>` or reply to the sticker message
-"""
+def __help__(chat):
+    return gs(chat, "blacklist_stickers_help")
 
 __mod_name__ = "Stickers Blacklist"
 

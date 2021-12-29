@@ -19,6 +19,7 @@ from telegram import Bot, Chat, ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, run_async
 from telegram.utils.helpers import mention_html
+from SayaBot.modules.language import gs
 
 
 def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
@@ -240,12 +241,8 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-__help__ = """
-*Admins only:*
- • `/mute <userhandle>`*:* silences a user. Can also be used as a reply, muting the replied to user.
- • `/tmute <userhandle> x(m/h/d)`*:* mutes a user for x time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
- • `/unmute <userhandle>`*:* unmutes a user. Can also be used as a reply, muting the replied to user.
-"""
+def __help__(chat):
+    return gs(chat, "muting_help")
 
 MUTE_HANDLER = CommandHandler("mute", mute, run_async=True)
 UNMUTE_HANDLER = CommandHandler("unmute", unmute, run_async=True)

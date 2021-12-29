@@ -12,6 +12,7 @@ from telegram.ext import CallbackContext, CommandHandler, Filters
 from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
+from SayaBot.modules.language import gs
 
 from SayaBot import (
     DEV_USERS,
@@ -535,32 +536,8 @@ def __gdpr__(user_id):
     sql.clear_user_bio(user_id)
 
 
-__help__ = """
-*ID:*
- • `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
- • `/gifid`*:* reply to a gif to me to tell you its file ID.
-
-*Self addded information:* 
- • `/setme <text>`*:* will set your info
- • `/me`*:* will get your or another user's info.
-Examples:
- `/setme I am a wolf.`
- `/me @username(defaults to yours if no user specified)`
-
-*Information others add on you:* 
- • `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
- • `/setbio <text>`*:* while replying, will save another user's bio 
-Examples:
- `/bio @username(defaults to yours if not specified).`
- `/setbio This user is a wolf` (reply to the user)
-
-*Overall Information about you:*
- • `/info`*:* get information about a user.
-*Guide to the General Data Protection Regulation (GDPR):*
- • `/gdpr`*:* deletes your information from the bot's database. Private chats only.
-*What is that health thingy?*
- Come and see [HP System explained](https://t.me/SayaBotSupport/565)
-"""
+def __help__(chat):
+    return gs(chat, "userinfo_help")
 
 SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio, run_async=True)
 GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)

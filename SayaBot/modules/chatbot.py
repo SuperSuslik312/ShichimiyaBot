@@ -21,6 +21,7 @@ from telegram.ext import (
     run_async,
 )
 from telegram.utils.helpers import mention_html
+from SayaBot.modules.language import gs
 
 CoffeeHouseAPI = API(AI_API_KEY)
 api_client = LydiaAI(CoffeeHouseAPI)
@@ -137,17 +138,8 @@ def list_chatbot_chats(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode="HTML")
 
 
-__help__ = f"""
-Chatbot utilizes the CoffeeHouse API and allows Saitama to talk and provides a more interactive group chat experience.
-
-*Commands:* 
-*Admins only:*
- • `/addchat`*:* Enables Chatbot mode in the chat.
- • `/rmchat`*:* Disables Chatbot mode in the chat.
-
-Reports bugs at @{SUPPORT_CHAT}
-*Powered by CoffeeHouse* (https://coffeehouse.intellivoid.net/) from @Intellivoid
-"""
+def __help__(chat):
+    return gs(chat, "chatbot_help")
 
 ADD_CHAT_HANDLER = CommandHandler("addchat", add_chat, run_async=True)
 REMOVE_CHAT_HANDLER = CommandHandler("rmchat", remove_chat, run_async=True)

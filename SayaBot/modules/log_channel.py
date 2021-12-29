@@ -4,6 +4,7 @@ from functools import wraps
 from telegram.ext import CallbackContext
 
 from SayaBot.modules.helper_funcs.misc import is_module_loaded
+from SayaBot.modules.language import gs
 
 FILENAME = __name__.rsplit(".", 1)[-1]
 
@@ -189,17 +190,8 @@ if is_module_loaded(FILENAME):
             return f"This group has all it's logs sent to: {escape_markdown(log_channel_info.title)} (`{log_channel}`)"
         return "No log channel is set for this group!"
 
-    __help__ = """
-*Admins only:*
-• `/logchannel`*:* get log channel info
-• `/setlog`*:* set the log channel.
-• `/unsetlog`*:* unset the log channel.
-
-Setting the log channel is done by:
-• adding the bot to the desired channel (as an admin!)
-• sending `/setlog` in the channel
-• forwarding the `/setlog` to the group
-"""
+    def __help__(chat):
+        return gs(chat, "log_help")
 
     __mod_name__ = "Log Channels"
 

@@ -15,6 +15,7 @@ from telegram.ext import (
     run_async,
 )
 from telegram.utils.helpers import mention_html
+from SayaBot.modules.language import gs
 
 REPORT_GROUP = 12
 REPORT_IMMUNE_USERS = DRAGONS + TIGERS + WOLVES + URANUS
@@ -261,16 +262,8 @@ def buttons(update: Update, context: CallbackContext):
             query.answer("🛑 Failed to delete message!")
 
 
-__help__ = """
- • `/report <reason>`*:* reply to a message to report it to admins.
- • `@admin`*:* reply to a message to report it to admins.
-*NOTE:* Neither of these will get triggered if used by admins.
-
-*Admins only:*
- • `/reports <on/off>`*:* change report setting, or view current status.
-   • If done in pm, toggles your status.
-   • If in group, toggles that groups's status.
-"""
+def __help__(chat):
+    return gs(chat, "reports_help")
 
 SETTING_HANDLER = CommandHandler("reports", report_setting, run_async=True)
 REPORT_HANDLER = CommandHandler("report", report, filters=Filters.chat_type.groups, run_async=True)

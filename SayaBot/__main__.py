@@ -305,7 +305,7 @@ def help_button(update, context):
                 "Here is the help for the *{}* module:\n".format(
                     HELPABLE[module].__mod_name__
                 )
-                + HELPABLE[module].__help__
+                + HELPABLE[module].__help__(update.effective_chat.id)
             )
             query.message.edit_text(
                 text=text,
@@ -402,7 +402,7 @@ def get_help(update: Update, context: CallbackContext):
             "Here is the available help for the *{}* module:\n".format(
                 HELPABLE[module].__mod_name__
             )
-            + HELPABLE[module].__help__
+            + HELPABLE[module].get_help
         )
         send_help(
             chat.id,
